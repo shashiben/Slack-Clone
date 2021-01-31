@@ -6,12 +6,13 @@ import UserPanel from "./userPanel";
 const SidePanel = () => {
   return (
     <>
+      Side Pannel
       <Menu
         size="large"
         inverted
         fixed="left"
         vertical
-        stye={{ background: "#4c3c4c", fontSize: "1.2rem" }}
+        style={{ background: "#4c3c4c", fontSize: "1.2rem" }}
       >
         <UserPanel />
         <Channel />

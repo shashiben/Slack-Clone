@@ -21,4 +21,13 @@ const addChannel = asyncHandler(async (req, res) => {
     });
   }
 });
-export { addChannel };
+
+const getAllChannels = asyncHandler(async (req, res) => {
+  const channels = await Channel.find({});
+  if (channels) {
+    res.json(channels);
+  } else {
+    res.status(404).json({ message: "No Channels Found" });
+  }
+});
+export { addChannel, getAllChannels };

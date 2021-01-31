@@ -2,11 +2,17 @@ import { createStore, combineReducers, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
 import { composeWithDevTools } from "redux-devtools-extension";
 import { userAuthReducer } from "./reducers/userReducers";
-import { createChannelReducer } from "./reducers/channelReducers";
+import {
+  createChannelReducer,
+  getAlLChannelsReducer,
+  setCurrentChannelReducer,
+} from "./reducers/channelReducers";
 
 const reducer = combineReducers({
   userAuth: userAuthReducer,
   createChannel: createChannelReducer,
+  getAllChannels: getAlLChannelsReducer,
+  setCurrentChannel: setCurrentChannelReducer,
 });
 const userInfoFromStorage = localStorage.getItem("userInfo")
   ? JSON.parse(localStorage.getItem("userInfo"))

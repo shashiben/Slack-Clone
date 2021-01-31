@@ -1,7 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Form, Icon, Input, Menu, Modal } from "semantic-ui-react";
-import { createChannel } from "../../actions/channelActions";
+import {
+  createChannel,
+  setCurrentChannelAction,
+} from "../../actions/channelActions";
+import { CHANNEL_CREATE_RESET } from "../../constants/channelConstants";
 
 const Channel = () => {
   const dispatch = useDispatch();
@@ -15,8 +19,14 @@ const Channel = () => {
     (state) => state.createChannel
   );
 
-  const closeModal = () => {
-    setModal(false);
+  const setFirstChannel = () => {
+    if (channels && channels.length > 0) {
+      changeChannel(channels[0]);
+    }
+  };
+
+  const changeChannel = (channel) => {
+    dispatch(setCurrentChannelAction(channel));
   };
 
   const handleSubmit = (e) => {
@@ -26,9 +36,20 @@ const Channel = () => {
       dispatch(createChannel(channelName, channelDetails));
     }
   };
+  useEffect(() => {
+    if (channelInfo) {
+      setModal(false);
+      setChannelDetails("");
+      setChannelName("");
+      dispatch({ type: CHANNEL_CREATE_RESET });
+    }
+  }, [channelInfo]);
 
   const openModal = () => {
     setModal(true);
+  };
+  const closeModal = () => {
+    setModal(false);
   };
   const handleDetailsChange = (e) => {
     e.preventDefault();
@@ -38,16 +59,31 @@ const Channel = () => {
     e.preventDefault();
     setChannelName(e.target.value);
   };
+
   return (
     <React.Fragment>
-      <Menu.Menu style={{ paddingBottom: "2em" }}>
+      <Menu.Menu className="menu">
         <Menu.Item>
           <span>
-            <Icon name="exchange" />
-            Channels
+            <Icon name="exchange" /> CHANNELS
           </span>{" "}
-          ({channels.length})<Icon name="add" onClick={openModal} />
+          ({channels && channels.length}){" "}
+          <Icon name="add" onClick={openModal} />
         </Menu.Item>
+        {channels &&
+          channels.length > 0 &&
+          channels.map((channel) => {
+            return (
+              <Menu.Item
+                key={channel._id}
+                name={channel.name}
+                style={{ opacity: 0.7 }}
+                onClick={() => changeChannel(channel)}
+              >
+                # {channel.name}
+              </Menu.Item>
+            );
+          })}
       </Menu.Menu>
       <Modal basic open={modal} onClose={closeModal}>
         <Modal.Header>Add a Channel</Modal.Header>
